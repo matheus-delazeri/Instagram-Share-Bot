@@ -39,13 +39,19 @@ class Screen:
     
     def __init__(self):
         window = Tk()
-        window.geometry("250x250")
+        window.geometry("300x300")
+        window.resizable(0, 0)
+        window.title("Instagram's Bot")
+
         label = Label(window, text="Username")
         label.place(x=50, y=50, anchor="center")
         label = Label(window, text="Password")
         label.place(x=50, y=100, anchor="center")
         label = Label(window, text="Link to post")
         label.place(x=50, y=150, anchor="center")
+        label = Label(window, text="*After hit the button the process\n will begin and the script will start to send\n the selected post to your first 6 suggested followers")
+        label.config(width=100)
+        label.place(x=150, y=210, anchor="center")
 
         user_text = StringVar()
         entry_user = Entry(window, textvariable=user_text)
@@ -58,7 +64,7 @@ class Screen:
         entry_link.place(x=150, y=150, anchor="center")
         
         myButton = Button(window, text="Start sharing", command= lambda: self.on_button_press(user_text, pw_text, link_text))
-        myButton.place(x=125, y=220, anchor="center")
+        myButton.place(x=150, y=260, anchor="center")
 
         window.mainloop()
 
