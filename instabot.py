@@ -1,13 +1,16 @@
 from time import sleep
 from selenium import webdriver
 from tkinter import *
+from tkinter import ttk
+from tkinter import messagebox
 
 class InstaBot:
-    def __init__(self, username, pw, link):
+    driver = None
+    def __init__(self, username, pw, link, browser):
         cont = 0
-        driver = webdriver.Chrome('chromedriver.exe')
+        driver = self._get_browser(browser)
         driver.get('https://www.instagram.com')
-        sleep(2)
+        sleep(3)
         login_field = driver.find_element_by_xpath("//input[@name=\"username\"]")\
             .send_keys(username)
         pw_field = driver.find_element_by_xpath("//input[@name=\"password\"]")\
@@ -35,11 +38,49 @@ class InstaBot:
             .click()
         print("Foto enviada com sucesso!")
         sleep(1)
+
+    def _get_browser(self, browser):
+        cont = 0
+        if(browser == 'Microsoft Edge'):
+            for x in range(1, 4):
+                try:
+                    driver = webdriver.Edge('browser_drivers/msedgedriver_{}.exe'.format(x))
+                except:
+                    cont += 1
+                    print("Wrong version")
+        elif(browser == 'Opera'):
+            for x in range(1, 4):
+                try:
+                    driver = webdriver.Opera('browser_drivers/operadriver_{}.exe'.format(x))
+                except:
+                    cont += 1
+                    print("Wrong version")
+        elif(browser == 'Google Chrome'):
+            for x in range(1, 4):
+                try:
+                    driver = webdriver.Chrome('browser_drivers/chromedriver_{}.exe'.format(x))
+                except:
+                    cont += 1
+                    print("Wrong version")
+        elif(browser == 'Mozilla Firefox'):
+            for x in range(1, 4):
+                try:
+                    driver = webdriver.Firefox('browser_drivers/geckodriver_{}.exe'.format(x))
+                except:
+                    print("Wrong version")
+                    cont += 1
+        else:
+            messagebox.showwarning(title="Error", message="Select a browser!")
+        
+        if(cont == 3):
+             messagebox.showwarning(title="Error", message="It seems you don't have this browser intalled! Please select another one")
+        else:
+            return driver        
+
 class Screen:
-    
     def __init__(self):
         window = Tk()
-        window.geometry("300x300")
+        window.geometry("300x350")
         window.resizable(0, 0)
         window.title("Instagram's Bot")
 
@@ -49,9 +90,14 @@ class Screen:
         label.place(x=50, y=100, anchor="center")
         label = Label(window, text="Link to post")
         label.place(x=50, y=150, anchor="center")
+        label = Label(window, text="Select a browser")
+        label.place(x=60, y=200, anchor="center")
+        browser_list= ["Microsoft Edge","Opera","Google Chrome","Mozilla Firefox"]
+        cbx = ttk.Combobox(window, values=browser_list, state="readonly", width=20)
+        cbx.place(x=180, y=200, anchor="center")
         label = Label(window, text="*After hit the button the process\n will begin and the script will start to send\n the selected post to your first 6 suggested followers")
         label.config(width=100)
-        label.place(x=150, y=210, anchor="center")
+        label.place(x=150, y=250, anchor="center")
 
         user_text = StringVar()
         entry_user = Entry(window, textvariable=user_text)
@@ -63,15 +109,14 @@ class Screen:
         entry_link = Entry(window, textvariable=link_text)
         entry_link.place(x=150, y=150, anchor="center")
         
-        myButton = Button(window, text="Start sharing", command= lambda: self.on_button_press(user_text, pw_text, link_text))
-        myButton.place(x=150, y=260, anchor="center")
+        myButton = Button(window, text="Start sharing", command= lambda: self.on_button_press(user_text, pw_text, link_text, cbx))
+        myButton.place(x=150, y=300, anchor="center")
 
         window.mainloop()
 
-    def on_button_press(self, username, password, link):
+    def on_button_press(self, username, password, link, combobox):
         user = username.get()
         pw = password.get()
         lk = link.get()
-        InstaBot(user, pw, lk)
-
-Screen()
+        cbx = combobox.get()
+        InstaBot(user, pw, lk, cbx)
