@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['main.py'],
-             pathex=['C:\\Users\\mathe\\Desktop\\Matheus\\Projects\\Python\\Projects\\InstaBot'],
+             pathex=['C:\\Users\\mathe\\Desktop\\Matheus\\Projects\\Python\\Projects\\InstaShareBot'],
              binaries=[],
              datas=[],
              hiddenimports=[],

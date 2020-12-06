@@ -46,7 +46,7 @@ class InstaBot:
             sleep(1)
         btn_send = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[1]/div/div[2]/div/button")\
             .click()
-        print("Post successufuly sent!")
+        print("Post successufully sent!")
         sleep(1)
 
     def _get_browser(self, browser):
