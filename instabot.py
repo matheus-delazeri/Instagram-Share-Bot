@@ -6,7 +6,7 @@ from tkinter import messagebox
 
 class InstaBot:
     driver = None
-    def __init__(self, username, pw, link, browser):
+    def __init__(self, username, pw, link, browser, delay):
         if(username != "" and pw != "" and link != ""):
             share_time = 7
             driver = self._get_browser(browser)
@@ -28,8 +28,13 @@ class InstaBot:
                 sleep(7)
                 driver.get(link)
                 while(True):
-                    self._share_post(driver, share_time)
-                    share_time = 1
+                    if(delay == "Yes"):
+                        sleep(1)
+                        self._share_post(driver, share_time)
+                        share_time = 3
+                    elif(delay == "No"):
+                        self._share_post(driver, share_time)
+                        share_time = 1
         else:
             messagebox.showwarning(title="Error", message="All fields must be filled!")
     
@@ -43,7 +48,7 @@ class InstaBot:
         for x in range(2, 7):                       
             btn_contacts = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[2]/div[2]/div[%i]/div/div[3]/button" % x)\
                 .click()
-            sleep(1)
+            sleep(0.5)
         btn_send = driver.find_element_by_xpath("/html/body/div[5]/div/div/div[1]/div/div[2]/div/button")\
             .click()
         print("Post successufully sent!")
